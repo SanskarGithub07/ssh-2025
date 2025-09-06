@@ -231,7 +231,7 @@ def run_speciesnet_classification(image_path):
             except OSError as e:
                 logging.error(f"Failed to delete temporary output file {temp_output_path}: {e}")
 
-@app.route('/classify', methods=['POST'])
+@app.route('/api/predict', methods=['POST'])
 def classify_image():
     """
     Classify an uploaded image using SpeciesNet.

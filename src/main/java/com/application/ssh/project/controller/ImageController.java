@@ -1,5 +1,6 @@
 package com.application.ssh.project.controller;
 
+import com.application.ssh.project.dto.AnimalPredictionDTO;
 import com.application.ssh.project.entity.ImageData;
 import com.application.ssh.project.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +19,13 @@ public class ImageController {
     private ImageService imageService;
 
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<?> uploadImage(@RequestParam("file") MultipartFile file) {
         try {
-            imageService.uploadImage(file);
-            return ResponseEntity.status(HttpStatus.OK).body("Image uploaded successfully!");
+            AnimalPredictionDTO prediction = imageService.uploadAndPredict(file);
+            return ResponseEntity.ok(prediction);
         } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload image.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to upload image.");
         }
     }
 
@@ -38,4 +40,3 @@ public class ImageController {
         return ResponseEntity.notFound().build();
     }
 }
-

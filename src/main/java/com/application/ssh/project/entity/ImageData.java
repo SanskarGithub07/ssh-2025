@@ -23,4 +23,7 @@ public class ImageData {
     @Lob // For large objects, store as BLOB/LONGBLOB
     @Column(name = "image_bytes", length = 100000)
     private byte[] imageBytes;
+
+    @OneToOne(mappedBy = "imageData", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private AnimalPrediction prediction;
 }
