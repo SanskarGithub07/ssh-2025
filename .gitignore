@@ -36,3 +36,6 @@ build/
 .envcameratrapai/*
 api_uploads/*
 cameratrapai/*
+test_bear.jpg
+test_elephant.jpg
+test.txt
