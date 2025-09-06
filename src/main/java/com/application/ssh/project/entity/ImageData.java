@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "image_data")
 @Data
@@ -26,4 +28,12 @@ public class ImageData {
 
     @OneToOne(mappedBy = "imageData", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private AnimalPrediction prediction;
+
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 }

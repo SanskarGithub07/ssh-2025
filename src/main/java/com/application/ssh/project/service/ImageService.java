@@ -2,28 +2,27 @@ package com.application.ssh.project.service;
 
 import com.application.ssh.project.client.FlaskClient;
 import com.application.ssh.project.dto.AnimalPredictionDTO;
+import com.application.ssh.project.dto.ImageMetadataDTO;
 import com.application.ssh.project.entity.AnimalPrediction;
 import com.application.ssh.project.entity.ImageData;
 import com.application.ssh.project.repository.AnimalPredictionRepository;
 import com.application.ssh.project.repository.ImageDataRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ImageService {
 
-    @Autowired
-    private ImageDataRepository imageDataRepository;
-
-    @Autowired
-    private AnimalPredictionRepository predictionRepository;
-
-    @Autowired
-    private FlaskClient flaskClient;
+    private final ImageDataRepository imageDataRepository;
+    private final AnimalPredictionRepository predictionRepository;
+    private final FlaskClient flaskClient;
 
     public AnimalPredictionDTO uploadAndPredict(MultipartFile file) throws IOException {
         ImageData imageData = new ImageData();
@@ -64,4 +63,30 @@ public class ImageService {
     public ImageData getImageById(Long id) {
         return imageDataRepository.findById(id).orElse(null);
     }
+
+    public List<ImageMetadataDTO> getAllImages() {
+        List<ImageData> imageDataList = imageDataRepository.findAll();
+        List<ImageMetadataDTO> imageMetadataDTOList = new ArrayList<>();
+
+        for(ImageData imageData : imageDataList){
+            ImageMetadataDTO imageMetadataDTO = ImageMetadataDTO.builder()
+                    .createdAt(imageData.getCreatedAt())
+                    .name(imageData.getName())
+                    .type(imageData.getType())
+                    .id(imageData.getId())
+                    .build();
+
+            if(imageData.getImageBytes() != null){
+                imageMetadataDTO.setSize(imageData.getImageBytes().length);
+            }
+            else{
+                imageMetadataDTO.setSize(0);
+            }
+
+            imageMetadataDTOList.add(imageMetadataDTO);
+        }
+
+        return imageMetadataDTOList;
+    }
+
 }

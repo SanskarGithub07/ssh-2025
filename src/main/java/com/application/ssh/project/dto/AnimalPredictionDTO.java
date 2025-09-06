@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,5 +26,7 @@ public class AnimalPredictionDTO {
     private double bboxY;             // 0.4284
     private double bboxWidth;         // 0.3232
     private double bboxHeight;        // 0.3223
+
+    private LocalDateTime predictionCreatedAt;
 }
 

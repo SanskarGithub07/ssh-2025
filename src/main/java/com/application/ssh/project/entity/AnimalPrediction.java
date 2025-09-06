@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "animal_predictions")
 @Data
@@ -35,5 +37,13 @@ public class AnimalPrediction {
     @OneToOne
     @JoinColumn(name = "image_id")
     private ImageData imageData;
+
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 }
 
